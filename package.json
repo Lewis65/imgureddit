@@ -1,0 +1,29 @@
+{
+  "name": "imgureddit",
+  "version": "1.0.0",
+  "description": "Browse images on a given subreddit posted to Imgur",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lewis65/imgureddit.git"
+  },
+  "keywords": [
+    "freecodecamp"
+  ],
+  "author": "Lewis Horwood @lewiebot",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lewis65/imgureddit/issues"
+  },
+  "homepage": "https://github.com/Lewis65/imgureddit#readme",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "mongodb": "^2.1.19",
+    "serve-favicon": "^2.3.0"
+  }
+}

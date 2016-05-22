@@ -1,0 +1,74 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800);
+
+/*Inheritance for whole page*/
+a {
+    text-decoration: none;
+    color: #44427F;
+}
+body {
+    background-color: #E9E8FF;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    margin: 0;
+}
+
+/*Header*/
+#header {
+    background-color: #44427F;
+    top: 0;
+    color: #FFF;
+    height: 45px;
+    width: 100%;
+    position: absolute;
+}
+#header a {color: #9F9BFF;}
+#header div {
+    display: inline-block;
+}
+#home {
+    font-weight: 700;
+    color: #9F9BFF;
+    font-size: 24px;
+    padding: 4px 0 8px 8px;
+}
+.left {float: left;}
+.right {
+    float: right;
+    font-size: 14px;
+    padding: 12px 8px 8px 0;
+}
+
+/*Main*/
+#wrapper {
+    color: #000;
+    font-size: 14px;
+    margin-top: 45px;
+    padding: 16px;
+    width: 100%
+}
+
+/*Search*/
+#search {
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+#subreddit {
+    border-radius: 8px;
+    margin: 3px;
+    padding: 4px 8px;
+    border: 1px solid #BAB9CC;
+    transition:.2s linear;
+    -webkit-transition:.2s linear;
+    -moz-transition:.2s linear;
+}
+#subreddit:focus {
+    outline: none;
+    box-shadow: 0 0 5px #9F9BFF;
+    border-color: #9F9BFF;
+}
+
+/*Main content/results*/
+#content {
+    font-size: 12px;
+}

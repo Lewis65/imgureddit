@@ -1,0 +1,45 @@
+<html>
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <link href='style.css' type='text/css' rel='stylesheet'>
+    <title>Imgureddit - The Imgur search engine for Reddit</title>
+</head>
+<body>
+    <div id='header'>
+        <div class='left' id='home'>
+            imgureddit
+        </div>
+        <div class='right'>
+            Lewis Horwood for
+            <a href='https://www.freecodecamp.com/challenges/image-search-abstraction-layer'>
+               FreeCodeCamp
+            </a> |
+            <a href='https://github.com/Lewis65/'>
+                <i class='fa fa-lg fa-github'></i> github
+            </a> |
+            <a href='https://twitter.com/Lewiebot'>
+                <i class='fa fa-lg fa-twitter'></i>@lewiebot
+            </a>
+        </div>
+    </div>
+    <div id='wrapper'>
+        <div id='search'>
+            <form action='submit' method='post'>
+                Search /r/
+                <input type='text' name='subreddit' autocomplete='off' autofocus=true id='subreddit'/>
+                <label>
+                    <input type='radio' name='searchwhat' value='recent' checked=true/>
+                    Recent
+                </label>
+                <label>
+                    <input type='radio' name='searchwhat' value='top'/>
+                    Top
+                </label>
+            </form>
+        </div>
+        <div id='content'>
+            <%- content -%>
+        </div>
+    </div>
+</body>
+</html>
