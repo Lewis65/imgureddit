@@ -68,20 +68,44 @@ app.get('/', function(req, res){
     res.end();
 });
 
-app.get(/^\/r\/:subreddit(\?:params)/, function(req, res){
-    var params = {
-        subreddit: req.params.subreddit,
-        sort: req.params.params.slice(
-            req.params.params.indexOf('sort='),
-            req.params.params.indexOf(/($|&)/)
-        ) || 'recent',
-        offet: req.params.params.slice(
-            req.params.params.indexOF('offset='),
-            req.params.params.indexOf(/($|&)/)
-        ) || '1'
-    }
+//TODO this regex doesn't work. Try npm path-to-regex
+app.get(/^\/r\/(.+)(\?(.+))?$/, function(req, res){
     //DEBUG
-    console.log(params);
-})
+    console.log('got the params query from a GET');
+    console.log(req.params);
+    var args = {
+        subreddit: req.params[0],
+        offset: '0',
+        sort: 'recent'
+    }
+    if(req.params[1]){
+        if (req.params[1].match(/offset=[0-9]+($|&)/)){
+            args.offset = (params[1].slice(
+                req.params[1].indexOF('offset='),
+                req.params[1].indexOf(/($|&)/)
+            ))
+        }
+        if (req.params[1].match(/sort=(recent|top)/)){
+            args.sort = (req.params[1].slice(
+                req.params[1].indexOF('sort='),
+                req.params[1].indexOf(/($|&)/)
+            ))
+        }
+    }
+    resultsHandler(req, res, args);
+});
+app.post('/*', function(req, res){
+    //DEBUG
+    console.log('got the params query from a POST');
+});
+
+function resultsHandler(req, res, args){
+    //DEBUG
+    console.log(args);
+    res.render('index', {
+        content: args.sort + ' ' + args.offset,
+        searchTerm: args.subreddit
+    });
+}
 
 app.listen(process.env.PORT || 8080);
