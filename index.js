@@ -1,16 +1,13 @@
 var express = require('express'),
     app = express();
+
 var mongo = require('mongodb').MongoClient,
     mongoURI = 'mongodb://user:password@ds011923.mlab.com:11923/imgureddit';
-require('jsdom').env('', function(err, window){
-    if (err){
-        throw err;
-        return;
-    }
-    var $ = require('jquery')(window);
-});
+
+var bodyParser = require('body-parser');
 
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -31,7 +28,7 @@ app.set('views', './views');
 //set page number
 var offset = 0;
 //store paginated results
-var results = [];
+var results;
 
 function getResults(term){
     //make call to imgur api
@@ -68,35 +65,34 @@ app.get('/', function(req, res){
     res.end();
 });
 
-//TODO this regex doesn't work. Try npm path-to-regex
-app.get(/^\/r\/(.+)(\?(.+))?$/, function(req, res){
+app.get(/^\/r\/(.+)(\\?(.+))?$/, function(req, res){
     //DEBUG
     console.log('got the params query from a GET');
     console.log(req.params);
+    console.log(req.query);
     var args = {
         subreddit: req.params[0],
         offset: '0',
         sort: 'recent'
     }
-    if(req.params[1]){
-        if (req.params[1].match(/offset=[0-9]+($|&)/)){
-            args.offset = (params[1].slice(
-                req.params[1].indexOF('offset='),
-                req.params[1].indexOf(/($|&)/)
-            ))
-        }
-        if (req.params[1].match(/sort=(recent|top)/)){
-            args.sort = (req.params[1].slice(
-                req.params[1].indexOF('sort='),
-                req.params[1].indexOf(/($|&)/)
-            ))
-        }
+    if (req.query.offset && req.query.offset.match(/[0-9]+/)){
+        args.offset = req.query.offset;
+    }
+    if (req.query.sort === 'recent' || req.query.sort === 'top'){
+        args.sort = req.query.sort;
     }
     resultsHandler(req, res, args);
 });
 app.post('/*', function(req, res){
     //DEBUG
     console.log('got the params query from a POST');
+    console.log(req.body);
+    var args = {
+        subreddit: req.body.subreddit,
+        offset: '0',
+        sort: req.body.sort
+    }
+    resultsHandler(req, res, args);
 });
 
 function resultsHandler(req, res, args){

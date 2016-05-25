@@ -24,15 +24,15 @@
     </div>
     <div id='wrapper'>
         <div id='search'>
-            <form action='submit' method='post'>
+            <form id='searchform' action='/' method='post'>
                 Search /r/
                 <input type='text' name='subreddit' autocomplete='off' autofocus=true id='subreddit' value='<%- searchTerm -%>'/>
                 <label>
-                    <input type='radio' name='searchwhat' value='recent' checked=true/>
+                    <input type='radio' name='sort' value='recent' checked=true/>
                     Recent
                 </label>
                 <label>
-                    <input type='radio' name='searchwhat' value='top'/>
+                    <input type='radio' name='sort' value='top'/>
                     Top
                 </label>
             </form>
