@@ -5,9 +5,11 @@ var mongo = require('mongodb').MongoClient,
     mongoURI = 'mongodb://user:password@ds011923.mlab.com:11923/imgureddit';
 
 var bodyParser = require('body-parser');
+var request = require('request');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -92,7 +94,7 @@ app.post('/*', function(req, res){
         offset: '0',
         sort: req.body.sort
     }
-    resultsHandler(req, res, args);
+    res.redirect('/r/' + args.subreddit + '?sort=' + args.sort + '&offset=' + args.offset);
 });
 
 function resultsHandler(req, res, args){
@@ -101,6 +103,27 @@ function resultsHandler(req, res, args){
     res.render('index', {
         content: args.sort + ' ' + args.offset,
         searchTerm: args.subreddit
+    });
+    offset = args.offset;
+    if (args.sort === 'recent'){
+        args.sort = 'top';
+    }
+    //make ajax call
+    request({
+        url: 'https://api.imgur.com/3/gallery/r/' + args.subreddit + '/' + args.sort + '/' + args.offset,
+        headers: {
+            'Authorization': 'Client-ID 85cc8b5c9abad86'
+        }
+    }, function(err, response, body){
+        if (err){
+            throw err;
+        } else {
+            results = JSON.parse(body);
+            console.log(results);
+            if(results.success){
+                //do this with results
+            }
+        }
     });
 }
 
