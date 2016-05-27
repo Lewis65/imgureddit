@@ -32,10 +32,54 @@ var offset = 0;
 //store paginated results
 var results;
 
-function getResults(term){
-    //make call to imgur api
-    //on callback split results to array of pages
-    //display page 1
+
+
+function resultsHandler(req, res, args){
+    //DEBUG
+    console.log(args);
+    offset = args.offset;
+    if (args.sort === 'recent'){
+        args.sort = 'top';
+    }
+    //make ajax call
+    request({
+        url: 'https://api.imgur.com/3/gallery/r/' + args.subreddit + '/' + args.sort + '/' + args.offset,
+        headers: {
+            'Authorization': 'Client-ID 85cc8b5c9abad86'
+        }
+    }, function(err, response, body){
+        if (err){
+            throw err;
+        } else {
+            results = JSON.parse(body);
+            if(results.success){
+                resultsToPages(results.data, res, args.subreddit);
+            }
+        }
+    });
+}
+
+function resultsToPages(data, res, subreddit){
+    var length = data.length;
+    console.log(length);
+    var pages = [[]];
+    for (var i = 0, k = 0; i < length; i++){
+        if (i % 10 === 0 && pages[k]){
+            k++;
+            pages[k] = [];
+        }
+        pages[k].push({
+            id: data[i].id,
+            title: data[i].title,
+            views: data[i].views,
+            url: data[i].link
+        });
+    };
+    pages.shift();
+    res.render('index', {
+        content: JSON.stringify(pages),
+        searchTerm: subreddit
+    });
 }
 
 function showPage(num, max){
@@ -48,6 +92,8 @@ function showPage(num, max){
         //render the relevant page
     }
 }
+
+
 
 //ROUTES
 //--/ = index
@@ -85,6 +131,7 @@ app.get(/^\/r\/(.+)(\\?(.+))?$/, function(req, res){
     }
     resultsHandler(req, res, args);
 });
+
 app.post('/*', function(req, res){
     //DEBUG
     console.log('got the params query from a POST');
@@ -97,34 +144,6 @@ app.post('/*', function(req, res){
     res.redirect('/r/' + args.subreddit + '?sort=' + args.sort + '&offset=' + args.offset);
 });
 
-function resultsHandler(req, res, args){
-    //DEBUG
-    console.log(args);
-    res.render('index', {
-        content: args.sort + ' ' + args.offset,
-        searchTerm: args.subreddit
-    });
-    offset = args.offset;
-    if (args.sort === 'recent'){
-        args.sort = 'top';
-    }
-    //make ajax call
-    request({
-        url: 'https://api.imgur.com/3/gallery/r/' + args.subreddit + '/' + args.sort + '/' + args.offset,
-        headers: {
-            'Authorization': 'Client-ID 85cc8b5c9abad86'
-        }
-    }, function(err, response, body){
-        if (err){
-            throw err;
-        } else {
-            results = JSON.parse(body);
-            console.log(results);
-            if(results.success){
-                //do this with results
-            }
-        }
-    });
-}
+
 
 app.listen(process.env.PORT || 8080);
