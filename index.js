@@ -27,18 +27,10 @@ app.set('views', './views');
 //3. Render paginated results
 //4.
 
-//set page number
-var offset = 0;
-//store paginated results
-var results;
-
 
 
 function resultsHandler(req, res, args){
-    //DEBUG
-    console.log(args);
-    offset = args.offset;
-    if (args.sort === 'recent'){
+    if (args.sort !== 'recent'){
         args.sort = 'top';
     }
     //make ajax call
@@ -51,15 +43,15 @@ function resultsHandler(req, res, args){
         if (err){
             throw err;
         } else {
-            results = JSON.parse(body);
+            var results = JSON.parse(body);
             if(results.success){
-                resultsToPages(results.data, res, args.subreddit);
+                resultsToPages(results.data, res, args);
             }
         }
     });
 }
 
-function resultsToPages(data, res, subreddit){
+function resultsToPages(data, res, args){
     var length = data.length;
     console.log(length);
     var pages = [[]];
@@ -78,19 +70,16 @@ function resultsToPages(data, res, subreddit){
     pages.shift();
     res.render('index', {
         content: JSON.stringify(pages),
-        searchTerm: subreddit
+        searchTerm: args.subreddit
     });
 }
 
-function showPage(num, max){
-    //num = page number, max = number of results pages
+function showPage(pages, subreddit){
     //render last page if offset is greater than results pages
-    if (num > max){
-        showPage(max, max);
-    } else {
-        //clear the content div
-        //render the relevant page
+    if (offset > pages.length){
+        offset = pages.length;
     }
+
 }
 
 
