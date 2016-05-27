@@ -51,10 +51,12 @@ function resultsHandler(req, res, args){
     });
 }
 
+var pages;
+
 function resultsToPages(data, res, args){
     var length = data.length;
     console.log(length);
-    var pages = [[]];
+    pages = [[]];
     for (var i = 0, k = 0; i < length; i++){
         if (i % 10 === 0 && pages[k]){
             k++;
@@ -68,18 +70,35 @@ function resultsToPages(data, res, args){
         });
     };
     pages.shift();
-    res.render('index', {
-        content: JSON.stringify(pages),
-        searchTerm: args.subreddit
-    });
+    console.log(pages);
+    showPage(pages, args, 0, res);
 }
 
-function showPage(pages, subreddit){
+function showPage(pageArray, args, change, res){
+    //add page change to offset
+    var offset = (Number(args.offset) + change);
     //render last page if offset is greater than results pages
     if (offset > pages.length){
         offset = pages.length;
+    } else if (offset < 0){
+        offset = 0;
     }
-
+    //get the current page
+    var items = pageArray[offset];
+    console.log(pageArray.length + ' - ' + offset)
+    console.log(items);
+    //concatenate the content
+    var cont = '';
+    for(var i = 0; i < items.length; i++){
+        cont += ('<div class="result">' +
+        '<h2>' + items[i].title + '</h2>' +
+        '<p>Views: ' + items[i].views + '</p>' +
+        '<p><a target="blank" href="' + items[i].url + '">' + items[i].url + '</a></p></div>');
+    }
+    res.render('index', {
+        content: cont,
+        searchTerm: args.subreddit
+    });
 }
 
 
