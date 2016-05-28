@@ -6,9 +6,7 @@ var mongo = require('mongodb').MongoClient,
 
 var bodyParser = require('body-parser');
 var request = require('request');
-var morgan = require('morgan');
 
-app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -23,14 +21,7 @@ app.set('views', './views');
 //2. remember search history
 //--a) show time of search and search query
 
-//TO DO
-//1. Make AJAX call to imgur api
-//2. Render all results
-//3. Render paginated results
-//4.
-
-
-
+//handle a search and get the results
 function resultsHandler(req, res, args){
     if (args.sort !== 'recent'){
         args.sort = 'top';
@@ -49,6 +40,7 @@ function resultsHandler(req, res, args){
             if(results.success){
                 //save the search to history
                 saveSearch(args);
+                //paginate results
                 resultsToPages(results.data, res, args);
             }
         }
