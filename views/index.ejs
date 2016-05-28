@@ -7,7 +7,7 @@
 <body>
     <div id='header'>
         <div class='left' id='home'>
-            imgureddit
+            <a href='/'>imgureddit</a>
         </div>
         <div class='right'>
             Lewis Horwood for
@@ -28,14 +28,18 @@
                 Search /r/
                 <input type='text' name='subreddit' autocomplete='off' autofocus=true id='subreddit' value='<%- searchTerm -%>'/>
                 <label>
-                    <input type='radio' name='sort' value='recent' checked=true/>
+                    <input type='radio' name='sort' value='recent' checked=<% checkedRecent %>/>
                     Recent
                 </label>
                 <label>
-                    <input type='radio' name='sort' value='top'/>
+                    <input type='radio' name='sort' value='top' checked=<% checkedTop %>/>
                     Top
                 </label>
+                <label>
+                    <button formaction='/' formmethod='post'>Submit</button>
+                </label>
             </form>
+            <a href='/history'>Search history</a>
         </div>
         <div id='content'>
             <%- content -%>

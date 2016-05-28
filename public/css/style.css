@@ -43,8 +43,8 @@ body {
     color: #000;
     font-size: 14px;
     margin-top: 45px;
-    padding: 16px;
-    width: 100%
+    padding: 16px 10%;
+    width: 80%
 }
 
 /*Search*/
@@ -52,6 +52,14 @@ body {
     padding: 10px;
     text-align: center;
     font-size: 14px;
+}
+#searchform button {
+    background-color: #44427F;
+    color: #FFF;
+    border-radius: 8px;
+    padding: 5px 16px;
+    border: 0;
+    margin-left: 12px;
 }
 #subreddit {
     border-radius: 8px;
@@ -71,6 +79,13 @@ body {
 /*Main content/results*/
 #content {
     font-size: 14px;
+    text-align: center;
+}
+.result {
+    display: inline-block;
+    text-align: left;
+    width: 40%;
+    padding: 1em;
 }
 .result h2 {
     font-size: 16px;
